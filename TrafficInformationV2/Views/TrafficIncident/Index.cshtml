@@ -1,0 +1,50 @@
+﻿@using System.Web.Script.Serialization
+@model IEnumerable<TrafikInformation.Models.TrafficMessage>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="row margin-top">
+    <div class="col-sm-6">
+        <div id="map" style="height: 550px;"></div>
+    </div>
+    <div class="row">
+        <div id="dropdownlist" class="col-sm-6">
+            <select id="category" class="btn btn-default dropdown-toggle">
+                <option value="100">Samtliga</option>
+                <option value="0">Vägtrafik</option>
+                <option value="1">Kollektivtrafik</option>
+                <option value="2">Planerad störning</option>
+                <option value="3">Övrigt</option>
+            </select>
+            <button value="showAll" id="showAll" class="btn-link">Visa alla</button>
+        </div>
+        <div class="col-sm-6" id="list" style="max-height: 550px; overflow: auto;">
+
+        </div>
+    </div>
+</div>
+<div id="result"></div>
+
+@section scripts{
+    <script src="http://maps.google.com/maps/api/js?v=3.2&sensor=false"></script>
+    <script src="~/Scripts/leaflet-google.js"></script>
+    <script src="~/Scripts/app.js"></script>
+
+    <script>
+        //Fetching data from server
+        $.get('@Url.Action("GetModelData")')
+            .done(function (response) {
+                var jsonModel = JSON.parse(response);
+                //renderIncidentList(jsonModel);
+                //renderMap();
+                app(jsonModel);
+                
+            })
+                .fail(function () {
+                    console.log("ajax error");
+                });
+
+    </script>
+}
